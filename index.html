@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Proline Group — Asset & Subscription Register</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.44.0/tabler-icons.min.css" />
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#111}
+.app{min-height:100vh;background:#111;color:#fff;font-family:system-ui,-apple-system,sans-serif}
+.header{background:#0a0a0a;border-bottom:3px solid #CC1C1C;padding:16px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.logo-mark{display:flex;flex-direction:column;line-height:1}
+.logo-mark .word{font-size:22px;font-weight:800;letter-spacing:3px;color:#fff}
+.logo-mark .word span{color:#CC1C1C}
+.logo-mark .tag{font-size:8px;letter-spacing:2px;color:#888;margin-top:3px;text-transform:uppercase}
+.header img{height:44px;object-fit:contain}
+.header-title{font-size:13px;color:#aaa;letter-spacing:2px;text-transform:uppercase;font-weight:500}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.user-chip{font-size:12px;color:#aaa;display:flex;align-items:center;gap:6px}
+.user-chip i{color:#CC1C1C}
+.signout-btn{background:none;border:1px solid #333;color:#aaa;border-radius:6px;padding:7px 14px;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.signout-btn:hover{border-color:#CC1C1C;color:#fff}
+.tabs{display:flex;background:#0a0a0a;border-bottom:1px solid #222}
+.tab{padding:12px 24px;font-size:13px;font-weight:500;letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:#888;border-bottom:3px solid transparent;transition:all 0.2s;border-top:none;border-left:none;border-right:none;background:none;flex:1}
+.tab.active{color:#fff;border-bottom:3px solid #CC1C1C}
+.tab:hover:not(.active){color:#ddd;background:#141414}
+.tab.admin-tab{color:#CC1C1C}
+.tab.admin-tab.active{border-bottom-color:#CC1C1C}
+.content{padding:24px}
+.form-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:24px;max-width:640px;margin:0 auto}
+.form-title{font-size:16px;font-weight:500;color:#fff;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.form-title i{color:#CC1C1C;font-size:18px}
+.form-subtitle{font-size:12px;color:#888;margin-bottom:20px;letter-spacing:0.5px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12px;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;font-weight:500}
+.field input,.field select,.field textarea{width:100%;background:#111;border:1px solid #333;border-radius:6px;padding:10px 12px;color:#fff;font-size:14px;outline:none;transition:border-color 0.2s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#CC1C1C}
+.field select option{background:#111}
+.field textarea{resize:vertical;min-height:72px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.field-row{grid-template-columns:1fr}}
+.btn-submit{background:#CC1C1C;color:#fff;border:none;border-radius:6px;padding:12px 28px;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;width:100%;margin-top:4px;transition:background 0.2s}
+.btn-submit:hover{background:#a81515}
+.btn-submit:disabled{background:#5a2020;cursor:wait}
+.btn-submit.success{background:#2d7a2d !important;cursor:default}
+.success-msg{background:#1a2e1a;border:1px solid #2d5a2d;border-radius:6px;padding:12px 16px;color:#6fcf6f;font-size:13px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.admin-section{max-width:1080px;margin:0 auto}
+.auth-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:32px;max-width:380px;margin:60px auto;text-align:center}
+.auth-card i.hero{font-size:40px;color:#CC1C1C;margin-bottom:12px;display:block}
+.auth-card h3{font-size:16px;font-weight:500;margin-bottom:4px}
+.auth-card p{font-size:12px;color:#888;margin-bottom:20px}
+.auth-card input{width:100%;background:#111;border:1px solid #333;border-radius:6px;padding:10px 12px;color:#fff;font-size:14px;outline:none;margin-bottom:12px}
+.auth-card input:focus{border-color:#CC1C1C}
+.err-msg{color:#e05555;font-size:12px;margin-bottom:10px;display:none}
+.register-toggle{display:flex;gap:8px;margin-bottom:18px}
+.tog{flex:1;background:#111;border:1px solid #333;color:#888;border-radius:6px;padding:9px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.tog.active{border-color:#CC1C1C;color:#fff;background:#1e1414}
+.admin-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:560px){.stat-row{grid-template-columns:1fr}}
+.stat{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:16px;text-align:center}
+.stat-num{font-size:24px;font-weight:700;color:#CC1C1C}
+.stat-lbl{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.table-wrap{overflow-x:auto;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#141414;color:#aaa;text-transform:uppercase;letter-spacing:1px;font-size:11px;text-align:left;padding:10px 12px;border-bottom:1px solid #2a2a2a;white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid #222;vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#1e1e1e}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.5px;white-space:nowrap}
+.badge-phone{background:#1a2433;color:#5899d6}.badge-fob{background:#2e2416;color:#d6a758}.badge-laptop{background:#1a2e1a;color:#6fbb6f}.badge-tablet{background:#2a1a2e;color:#c07ad6}.badge-other{background:#222;color:#999}
+.del-btn{background:none;border:1px solid #442;color:#e05555;border-radius:6px;padding:5px 9px;cursor:pointer;transition:all .2s}
+.del-btn:hover{background:#2e1414;border-color:#e05555}
+.empty-state{padding:36px;text-align:center;color:#666;font-size:13px}
+.empty-state i{display:block;font-size:28px;margin-bottom:8px;color:#444}
+.export-btn{background:#1a2e1a;border:1px solid #2d5a2d;color:#6fbb6f;padding:7px 16px;border-radius:6px;font-size:12px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s}
+.export-btn:hover{background:#223d22;border-color:#3d7a3d}
+.export-all-btn{background:#1a2433;border:1px solid #2a4060;color:#5899d6;padding:7px 16px;border-radius:6px;font-size:12px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s}
+.export-all-btn:hover{background:#203050}
+.refresh-btn{background:#222;border:1px solid #333;color:#aaa;padding:7px 16px;border-radius:6px;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s}
+.refresh-btn:hover{color:#fff;border-color:#555}
+.toast{position:fixed;bottom:24px;right:24px;background:#1a2e1a;border:1px solid #2d5a2d;color:#6fbb6f;padding:12px 18px;border-radius:8px;font-size:13px;display:flex;align-items:center;gap:8px;z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none}
+.toast.show{opacity:1}
+.config-warn{background:#2e2416;border:1px solid #6a5420;color:#d6a758;border-radius:8px;padding:14px 18px;font-size:13px;max-width:640px;margin:40px auto;line-height:1.6}
+.config-warn code{background:#1a1a1a;padding:2px 6px;border-radius:4px;font-size:12px}
+.hidden{display:none !important}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <img id="logoImg" src="logo.png" alt="" onerror="this.classList.add('hidden');document.getElementById('logoFallback').classList.remove('hidden')" />
+    <div id="logoFallback" class="logo-mark hidden">
+      <div class="word">PRO<span>LINE</span></div>
+      <div class="tag">Melbourne · Sydney | Built Not Bought</div>
+    </div>
+    <div>
+      <div style="font-size:16px;font-weight:600;color:#fff;letter-spacing:1px">ASSET &amp; SUBSCRIPTION REGISTER</div>
+      <div class="header-title">Proline Group — Internal</div>
+    </div>
+    <div class="header-right hidden" id="header-user">
+      <div class="user-chip"><i class="ti ti-user-circle" aria-hidden="true"></i> <span id="user-email"></span></div>
+      <button class="signout-btn" onclick="signOut()">Sign out</button>
+    </div>
+  </div>
+
+  <!-- CONFIG WARNING -->
+  <div id="config-warn" class="config-warn hidden">
+    <strong>Setup required:</strong> open this file and replace <code>SUPABASE_URL</code> and <code>SUPABASE_ANON_KEY</code> at the top of the script with the values from your Supabase project (Settings → API). See the included setup guide.
+  </div>
+
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen" class="hidden">
+    <div class="auth-card">
+      <i class="ti ti-lock hero" aria-hidden="true"></i>
+      <h3>Employee Sign In</h3>
+      <p>Sign in with your Proline account to submit register entries.</p>
+      <div class="err-msg" id="login-err"></div>
+      <input type="email" id="login-email" placeholder="Email address" autocomplete="username" />
+      <input type="password" id="login-pass" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')signIn()" />
+      <button class="btn-submit" id="login-btn" onclick="signIn()">Sign In</button>
+      <p style="margin-top:14px;margin-bottom:0">No account? Contact your administrator to be added.</p>
+    </div>
+  </div>
+
+  <!-- MAIN APP (after login) -->
+  <div id="main-app" class="hidden">
+    <div class="tabs">
+      <button class="tab active" id="tabbtn-property" onclick="showTab('property')"><i class="ti ti-device-mobile" aria-hidden="true"></i> Company Property</button>
+      <button class="tab" id="tabbtn-subscriptions" onclick="showTab('subscriptions')"><i class="ti ti-credit-card" aria-hidden="true"></i> Subscriptions</button>
+      <button class="tab admin-tab hidden" id="tabbtn-admin" onclick="showTab('admin')"><i class="ti ti-shield-lock" aria-hidden="true"></i> Admin</button>
+    </div>
+    <div class="content">
+
+      <!-- PROPERTY FORM -->
+      <div id="tab-property">
+        <div class="form-card">
+          <div class="form-title"><i class="ti ti-device-mobile" aria-hidden="true"></i> Company Property Register</div>
+          <div class="form-subtitle">Submit items of company property assigned to you. Entries go straight to the admin — you won't see them listed here.</div>
+          <div id="prop-success" style="display:none" class="success-msg"><i class="ti ti-circle-check" aria-hidden="true"></i> Entry submitted successfully.</div>
+          <div class="field"><label>Your Full Name</label><input type="text" id="prop-name" placeholder="e.g. Jake Smith" /></div>
+          <div class="field"><label>Item Type</label>
+            <select id="prop-type">
+              <option value="">— Select item —</option>
+              <option>Phone</option><option>Fob / Key Card</option><option>Laptop</option><option>Tablet</option><option>Vehicle</option><option>Tool / Equipment</option><option>Other</option>
+            </select>
+          </div>
+          <div class="field"><label>Item Description</label><input type="text" id="prop-desc" placeholder="e.g. iPhone 14 Pro, Black — 128GB" /></div>
+          <div class="field-row">
+            <div class="field"><label>Asset / Serial Number</label><input type="text" id="prop-serial" placeholder="e.g. SN-20241105" /></div>
+            <div class="field"><label>Date Issued</label><input type="date" id="prop-date" /></div>
+          </div>
+          <div class="field"><label>Notes (optional)</label><textarea id="prop-notes" placeholder="Any relevant notes e.g. condition, accessories included..."></textarea></div>
+          <button class="btn-submit" id="prop-btn" onclick="submitProperty()">Submit Entry</button>
+        </div>
+      </div>
+
+      <!-- SUBSCRIPTIONS FORM -->
+      <div id="tab-subscriptions" style="display:none">
+        <div class="form-card">
+          <div class="form-title"><i class="ti ti-credit-card" aria-hidden="true"></i> Subscription Register</div>
+          <div class="form-subtitle">Log any company subscriptions assigned to or used by you. Entries go straight to the admin.</div>
+          <div id="sub-success" style="display:none" class="success-msg"><i class="ti ti-circle-check" aria-hidden="true"></i> Subscription logged successfully.</div>
+          <div class="field"><label>Your Full Name</label><input type="text" id="sub-name" placeholder="e.g. Jake Smith" /></div>
+          <div class="field-row">
+            <div class="field"><label>Subscription Name</label><input type="text" id="sub-svcname" placeholder="e.g. Adobe Creative Cloud" /></div>
+            <div class="field"><label>Category</label>
+              <select id="sub-cat">
+                <option value="">— Category —</option>
+                <option>Software / SaaS</option><option>Cloud / Hosting</option><option>Comms / Messaging</option><option>Project Management</option><option>Design</option><option>Finance / Accounting</option><option>Security</option><option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label>Email Address Linked</label><input type="email" id="sub-email" placeholder="e.g. jake@prolinemetalcladding.com.au" /></div>
+          <div class="field-row">
+            <div class="field"><label>Billing Cycle</label>
+              <select id="sub-cycle">
+                <option value="">— Cycle —</option><option>Monthly</option><option>Annual</option><option>Quarterly</option>
+              </select>
+            </div>
+            <div class="field"><label>Charge Date</label><input type="text" id="sub-chargedate" placeholder="e.g. 15th of each month" /></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Cost (AUD)</label><input type="number" id="sub-cost" placeholder="e.g. 79.99" min="0" step="0.01" /></div>
+            <div class="field"><label>Payment Method</label>
+              <select id="sub-payment">
+                <option value="">— Method —</option><option>Company Card</option><option>Personal (Reimbursed)</option><option>Direct Debit</option><option>Unknown</option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label>Notes (optional)</label><textarea id="sub-notes" placeholder="Any relevant notes e.g. shared team login, usage purpose..."></textarea></div>
+          <button class="btn-submit" id="sub-btn" onclick="submitSubscription()">Submit Entry</button>
+        </div>
+      </div>
+
+      <!-- ADMIN PANEL (only rendered for admins) -->
+      <div id="tab-admin" style="display:none">
+        <div class="admin-section">
+          <div class="admin-toolbar">
+            <div class="register-toggle" style="margin-bottom:0;flex:1;max-width:340px">
+              <button class="tog active" id="togProp" onclick="adminToggle('property')">Property</button>
+              <button class="tog" id="togSub" onclick="adminToggle('subscriptions')">Subscriptions</button>
+            </div>
+            <button class="refresh-btn" onclick="loadAdminData(true)"><i class="ti ti-refresh" aria-hidden="true"></i> Refresh</button>
+            <button class="export-all-btn" onclick="exportAll()"><i class="ti ti-file-spreadsheet" aria-hidden="true"></i> Export All to Excel</button>
+          </div>
+          <div class="stat-row" id="admin-stats"></div>
+
+          <div id="admin-property-view">
+            <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+              <button class="export-btn" onclick="exportProperty()"><i class="ti ti-download" aria-hidden="true"></i> Export Property Register</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Employee</th><th>Type</th><th>Description</th><th>Asset / Serial</th><th>Date Issued</th><th>Notes</th><th>Submitted By</th><th>Submitted</th><th></th></tr></thead>
+                <tbody id="prop-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="admin-sub-view" style="display:none">
+            <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+              <button class="export-btn" onclick="exportSubscriptions()"><i class="ti ti-download" aria-hidden="true"></i> Export Subscription Register</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Employee</th><th>Subscription</th><th>Category</th><th>Email</th><th>Cycle</th><th>Charge Date</th><th>Cost</th><th>Payment</th><th>Notes</th><th>Submitted By</th><th>Submitted</th><th></th></tr></thead>
+                <tbody id="sub-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i class="ti ti-circle-check" aria-hidden="true"></i> <span id="toast-msg"></span></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+/* ============================================================
+   CONFIGURATION — paste your Supabase project values here.
+   Supabase Dashboard → Project Settings → API.
+   The anon key is safe to ship in the page; all real security
+   is enforced by Row Level Security policies in the database.
+   ============================================================ */
+const SUPABASE_URL = 'https://supabase.com/dashboard/project/ropgewalgzkuodbhklpq';        // e.g. https://abcd1234.supabase.co
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvcGdld2FsZ3prdW9kYmhrbHBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMzE3MjIsImV4cCI6MjA5ODYwNzcyMn0.t_5J738E-KubXarz7WuWaSHIWXIKJXadKoVfWFK-ktA';
+
+let sb = null, currentUser = null, isAdmin = false, adminView = 'property';
+let cacheProps = [], cacheSubs = [];
+
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function showToast(msg) {
+  $('toast-msg').textContent = msg;
+  $('toast').classList.add('show');
+  setTimeout(()=>$('toast').classList.remove('show'), 3000);
+}
+function fmtDate(iso) {
+  if (!iso) return '—';
+  try { return new Date(iso).toLocaleDateString('en-AU',{day:'2-digit',month:'short',year:'numeric'}); } catch(e){ return iso; }
+}
+function today(){ return new Date().toISOString().slice(0,10); }
+function btnSuccess(id) {
+  const b = $(id);
+  b.disabled = true;
+  b.classList.add('success');
+  b.innerHTML = '<i class="ti ti-circle-check" aria-hidden="true"></i> Success';
+  setTimeout(()=>{ b.classList.remove('success'); b.textContent = 'Submit Entry'; b.disabled = false; }, 3000);
+}
+function badgeType(t) {
+  const m = {Phone:'badge-phone','Fob / Key Card':'badge-fob',Laptop:'badge-laptop',Tablet:'badge-tablet'};
+  return `<span class="badge ${m[t]||'badge-other'}">${esc(t)||'—'}</span>`;
+}
+
+/* ---------- Boot ---------- */
+async function init() {
+  if (SUPABASE_URL.startsWith('YOUR_') || SUPABASE_ANON_KEY.startsWith('YOUR_')) {
+    $('config-warn').classList.remove('hidden');
+    return;
+  }
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) await enterApp(session.user); else showLogin();
+  sb.auth.onAuthStateChange((_e, s) => {
+    if (s && !currentUser) enterApp(s.user);
+    if (!s && currentUser) { currentUser=null; isAdmin=false; location.reload(); }
+  });
+}
+
+function showLogin() {
+  $('login-screen').classList.remove('hidden');
+  $('main-app').classList.add('hidden');
+  $('header-user').classList.add('hidden');
+}
+
+async function enterApp(user) {
+  currentUser = user;
+  // Role check — is this user an admin? (profiles table, maintained by admin)
+  try {
+    const { data } = await sb.from('profiles').select('is_admin').eq('id', user.id).maybeSingle();
+    isAdmin = !!(data && data.is_admin);
+  } catch(e) { isAdmin = false; }
+  $('login-screen').classList.add('hidden');
+  $('main-app').classList.remove('hidden');
+  $('header-user').classList.remove('hidden');
+  $('user-email').textContent = user.email || '';
+  if (isAdmin) $('tabbtn-admin').classList.remove('hidden');
+  showTab('property');
+}
+
+/* ---------- Auth ---------- */
+async function signIn() {
+  const email = $('login-email').value.trim();
+  const pass = $('login-pass').value;
+  const err = $('login-err');
+  err.style.display = 'none';
+  if (!email || !pass) { err.textContent = 'Enter your email and password.'; err.style.display='block'; return; }
+  $('login-btn').disabled = true;
+  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+  $('login-btn').disabled = false;
+  if (error) { err.textContent = 'Sign in failed: ' + error.message; err.style.display='block'; return; }
+  $('login-pass').value = '';
+}
+async function signOut() { await sb.auth.signOut(); }
+
+/* ---------- Tabs ---------- */
+function showTab(t) {
+  ['property','subscriptions','admin'].forEach(id => {
+    $('tab-'+id).style.display = (id===t)?'block':'none';
+    $('tabbtn-'+id).classList.toggle('active', id===t);
+  });
+  if (t==='admin' && isAdmin) loadAdminData();
+}
+
+/* ---------- Employee submissions (INSERT only) ---------- */
+async function submitProperty() {
+  const name = $('prop-name').value.trim();
+  const type = $('prop-type').value;
+  const desc = $('prop-desc').value.trim();
+  if (!name||!type||!desc) { alert('Please fill in Name, Item Type and Description.'); return; }
+  $('prop-btn').disabled = true;
+  const { error } = await sb.from('property_register').insert({
+    employee_name: name,
+    item_type: type,
+    description: desc,
+    serial: $('prop-serial').value.trim() || null,
+    date_issued: $('prop-date').value || null,
+    notes: $('prop-notes').value.trim() || null,
+    submitted_by: currentUser.email
+  });
+  if (error) { $('prop-btn').disabled = false; alert('Could not submit entry: ' + error.message); return; }
+  btnSuccess('prop-btn');
+  ['prop-name','prop-desc','prop-serial','prop-date','prop-notes'].forEach(id=>{$(id).value='';});
+  $('prop-type').value='';
+  $('prop-success').style.display='flex';
+  setTimeout(()=>{$('prop-success').style.display='none';},4000);
+  showToast('Property entry submitted.');
+}
+
+async function submitSubscription() {
+  const name = $('sub-name').value.trim();
+  const svcname = $('sub-svcname').value.trim();
+  const email = $('sub-email').value.trim();
+  if (!name||!svcname||!email) { alert('Please fill in Name, Subscription Name and Email.'); return; }
+  $('sub-btn').disabled = true;
+  const costVal = $('sub-cost').value;
+  const { error } = await sb.from('subscription_register').insert({
+    employee_name: name,
+    subscription_name: svcname,
+    category: $('sub-cat').value || null,
+    email_linked: email,
+    billing_cycle: $('sub-cycle').value || null,
+    charge_date: $('sub-chargedate').value.trim() || null,
+    cost: costVal ? parseFloat(costVal) : null,
+    payment_method: $('sub-payment').value || null,
+    notes: $('sub-notes').value.trim() || null,
+    submitted_by: currentUser.email
+  });
+  if (error) { $('sub-btn').disabled = false; alert('Could not submit entry: ' + error.message); return; }
+  btnSuccess('sub-btn');
+  ['sub-name','sub-svcname','sub-email','sub-chargedate','sub-cost','sub-notes'].forEach(id=>{$(id).value='';});
+  ['sub-cat','sub-cycle','sub-payment'].forEach(id=>{$(id).value='';});
+  $('sub-success').style.display='flex';
+  setTimeout(()=>{$('sub-success').style.display='none';},4000);
+  showToast('Subscription logged.');
+}
+
+/* ---------- Admin (SELECT / DELETE — blocked by RLS for non-admins) ---------- */
+function adminToggle(view) {
+  adminView = view;
+  $('admin-property-view').style.display = view==='property'?'block':'none';
+  $('admin-sub-view').style.display = view==='subscriptions'?'block':'none';
+  $('togProp').classList.toggle('active', view==='property');
+  $('togSub').classList.toggle('active', view==='subscriptions');
+}
+
+async function loadAdminData(toast) {
+  const [pRes, sRes] = await Promise.all([
+    sb.from('property_register').select('*').order('created_at', {ascending:false}),
+    sb.from('subscription_register').select('*').order('created_at', {ascending:false})
+  ]);
+  if (pRes.error || sRes.error) { showToast('Could not load records: ' + (pRes.error||sRes.error).message); return; }
+  cacheProps = pRes.data || [];
+  cacheSubs = sRes.data || [];
+  const totalCost = cacheSubs.reduce((a,s)=>a+(parseFloat(s.cost)||0),0);
+  $('admin-stats').innerHTML = `
+    <div class="stat"><div class="stat-num">${cacheProps.length}</div><div class="stat-lbl">Property Items</div></div>
+    <div class="stat"><div class="stat-num">${cacheSubs.length}</div><div class="stat-lbl">Subscriptions</div></div>
+    <div class="stat"><div class="stat-num">$${totalCost.toFixed(2)}</div><div class="stat-lbl">Total Sub Cost</div></div>`;
+
+  $('prop-tbody').innerHTML = cacheProps.length ? cacheProps.map(p=>`<tr>
+    <td><strong>${esc(p.employee_name)}</strong></td><td>${badgeType(p.item_type)}</td><td>${esc(p.description)}</td>
+    <td style="font-family:monospace;font-size:12px;color:#aaa">${esc(p.serial)||'—'}</td>
+    <td style="color:#aaa;font-size:12px">${p.date_issued?fmtDate(p.date_issued):'—'}</td>
+    <td style="color:#888;font-size:12px">${esc(p.notes)||'—'}</td>
+    <td style="color:#5899d6;font-size:12px">${esc(p.submitted_by)||'—'}</td>
+    <td style="color:#555;font-size:11px">${fmtDate(p.created_at)}</td>
+    <td><button class="del-btn" onclick="deleteEntry('property_register','${p.id}')"><i class="ti ti-trash" aria-hidden="true"></i></button></td>
+  </tr>`).join('') : '<tr><td colspan="9"><div class="empty-state"><i class="ti ti-inbox" aria-hidden="true"></i>No property entries yet.</div></td></tr>';
+
+  $('sub-tbody').innerHTML = cacheSubs.length ? cacheSubs.map(s=>`<tr>
+    <td><strong>${esc(s.employee_name)}</strong></td><td>${esc(s.subscription_name)}</td>
+    <td style="font-size:12px;color:#aaa">${esc(s.category)||'—'}</td>
+    <td style="font-size:12px;color:#5899d6">${esc(s.email_linked)}</td>
+    <td style="font-size:12px;color:#aaa">${esc(s.billing_cycle)||'—'}</td>
+    <td style="font-size:12px;color:#aaa">${esc(s.charge_date)||'—'}</td>
+    <td style="color:#6fbb6f;font-weight:500">${s.cost!=null?'$'+parseFloat(s.cost).toFixed(2):'—'}</td>
+    <td style="font-size:12px;color:#aaa">${esc(s.payment_method)||'—'}</td>
+    <td style="font-size:12px;color:#888">${esc(s.notes)||'—'}</td>
+    <td style="color:#5899d6;font-size:12px">${esc(s.submitted_by)||'—'}</td>
+    <td style="color:#555;font-size:11px">${fmtDate(s.created_at)}</td>
+    <td><button class="del-btn" onclick="deleteEntry('subscription_register','${s.id}')"><i class="ti ti-trash" aria-hidden="true"></i></button></td>
+  </tr>`).join('') : '<tr><td colspan="12"><div class="empty-state"><i class="ti ti-inbox" aria-hidden="true"></i>No subscription entries yet.</div></td></tr>';
+  if (toast) showToast('Records refreshed.');
+}
+
+async function deleteEntry(table, id) {
+  if (!confirm('Delete this entry?')) return;
+  const { error } = await sb.from(table).delete().eq('id', id);
+  if (error) { showToast('Delete failed: ' + error.message); return; }
+  loadAdminData();
+}
+
+/* ---------- Excel exports ---------- */
+function styleSheet(ws) {
+  const range = XLSX.utils.decode_range(ws['!ref']);
+  for (let C = range.s.c; C <= range.e.c; C++) {
+    const hdr = XLSX.utils.encode_cell({r:0,c:C});
+    if (ws[hdr]) ws[hdr].s = {font:{bold:true,color:{rgb:'FFFFFF'}},fill:{fgColor:{rgb:'CC1C1C'}},alignment:{horizontal:'center'}};
+  }
+}
+function propRows(props) {
+  return props.map(p=>({'Employee Name':p.employee_name,'Item Type':p.item_type,'Description':p.description,'Asset / Serial':p.serial||'','Date Issued':p.date_issued||'','Notes':p.notes||'','Submitted By':p.submitted_by||'','Date Submitted':fmtDate(p.created_at)}));
+}
+function subRows(subs) {
+  return subs.map(s=>({'Employee Name':s.employee_name,'Subscription':s.subscription_name,'Category':s.category||'','Email Linked':s.email_linked,'Billing Cycle':s.billing_cycle||'','Charge Date':s.charge_date||'','Cost (AUD)':s.cost!=null?parseFloat(s.cost):'','Payment Method':s.payment_method||'','Notes':s.notes||'','Submitted By':s.submitted_by||'','Date Submitted':fmtDate(s.created_at)}));
+}
+async function exportProperty() {
+  await loadAdminData();
+  if (!cacheProps.length) { showToast('No property entries to export.'); return; }
+  const ws = XLSX.utils.json_to_sheet(propRows(cacheProps));
+  ws['!cols'] = [{wch:20},{wch:16},{wch:30},{wch:18},{wch:14},{wch:28},{wch:26},{wch:16}];
+  styleSheet(ws);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Property Register');
+  XLSX.writeFile(wb, `Proline_Property_Register_${today()}.xlsx`);
+  showToast('Property Register exported successfully.');
+}
+async function exportSubscriptions() {
+  await loadAdminData();
+  if (!cacheSubs.length) { showToast('No subscription entries to export.'); return; }
+  const ws = XLSX.utils.json_to_sheet(subRows(cacheSubs));
+  ws['!cols'] = [{wch:20},{wch:24},{wch:20},{wch:30},{wch:14},{wch:18},{wch:12},{wch:20},{wch:28},{wch:26},{wch:16}];
+  styleSheet(ws);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Subscription Register');
+  XLSX.writeFile(wb, `Proline_Subscription_Register_${today()}.xlsx`);
+  showToast('Subscription Register exported successfully.');
+}
+async function exportAll() {
+  await loadAdminData();
+  if (!cacheProps.length && !cacheSubs.length) { showToast('No data to export yet.'); return; }
+  const wb = XLSX.utils.book_new();
+  if (cacheProps.length) {
+    const ws1 = XLSX.utils.json_to_sheet(propRows(cacheProps));
+    ws1['!cols'] = [{wch:20},{wch:16},{wch:30},{wch:18},{wch:14},{wch:28},{wch:26},{wch:16}];
+    styleSheet(ws1);
+    XLSX.utils.book_append_sheet(wb, ws1, 'Property Register');
+  }
+  if (cacheSubs.length) {
+    const ws2 = XLSX.utils.json_to_sheet(subRows(cacheSubs));
+    ws2['!cols'] = [{wch:20},{wch:24},{wch:20},{wch:30},{wch:14},{wch:18},{wch:12},{wch:20},{wch:28},{wch:26},{wch:16}];
+    styleSheet(ws2);
+    XLSX.utils.book_append_sheet(wb, ws2, 'Subscription Register');
+  }
+  XLSX.writeFile(wb, `Proline_All_Registers_${today()}.xlsx`);
+  showToast('Full register exported — both sheets included.');
+}
+
+init();
+</script>
+</body>
+</html>
